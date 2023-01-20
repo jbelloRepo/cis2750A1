@@ -1,0 +1,4 @@
+test1.c
+*.o 
+*.so 
+main

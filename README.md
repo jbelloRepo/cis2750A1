@@ -60,7 +60,7 @@ The Docker container (scioer) cannot run GUI programs <br>
 
 ## Author Information
 Author: Jubril Bello <br>
-Student ID: 095776 <br>
+Student ID: 0957766 <br>
 Email: Jbello@uoguelph.ca <br>
 Course: CIS 2430 (Winter 2023) <br>
 Professor: Stefan Kremer <br>
