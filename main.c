@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     do
     {
         molappend_atom(molecule, &a1);
-
+        printf("\n");
         printf("The atom max is: %d \n", molecule->atom_max);
         printf("After the molappend, the atom in the 0 index is: %s \n", molecule->atoms[j].element);
         j += 1;
@@ -55,12 +55,23 @@ int main(int argc, char **argv)
         i += 1;
     } while (i < 2); //? Tested with i<10000; at which point atom max = 49152
 
+    printf("==================================== This is for bondset() =============================================================================\n");
     bondset(&bond1, &(molecule->atoms[0]), &(molecule->atoms[1]), 1);
-    printf("Address pointed to by molecule->atoms[0] &(molecule->atoms[1]: %p & %p \n", (void*)&(molecule->atoms[0]), (void*)&(molecule->atoms[1])); //! error checking
+    printf("Address pointed to by molecule->atoms[0] & (molecule->atoms[1]: %p & %p \n", (void *)&(molecule->atoms[0]), (void *)&(molecule->atoms[1])); //! error checking
     bondset(&bond2, &(molecule->atoms[0]), &(molecule->atoms[2]), 1);
-    printf("Address pointed to by molecule->atoms[0] &(molecule->atoms[2]: %p & %p \n", (void*)&(molecule->atoms[0]), (void*)&(molecule->atoms[2])); //! error checking
-    
+    printf("Address pointed to by molecule->atoms[0] & (molecule->atoms[2]: %p & %p \n", (void *)&(molecule->atoms[0]), (void *)&(molecule->atoms[2])); //! error checking
+    printf("===========================================================================================================================================\n");
+    printf("\n");
 
+    /* add the bonds */
+//     int k = 0;
+//     int l = 0;
+//     do{
+//         molappend_bond(molecule, &bond1);
+//     molappend_bond(molecule, &bond2);
+
+// k+=1;
+//     } while (i<2);
     molfree(molecule);
 
     return 0;

@@ -55,7 +55,7 @@ void molfree(molecule *ptr);
 void molappend_atom(molecule *molecule, atom *atom);
 void molappend_bond(molecule *molecule, bond *bond);
 
-void molsort(molecule *molecule);
+// void molsort(molecule *molecule);
 void printHello(void);
 
 #endif

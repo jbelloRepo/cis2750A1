@@ -18,10 +18,7 @@ void atomset(atom *atom, char element[3], double *x, double *y, double *z) // se
     atom->z = *z;
 
 #ifdef DEBUG_OFF
-    // printf("The char character is: %c \n", element[0]);
-    // printf("The char character is: %c \n", element[1]);
-    // printf("The char character is: %c \n", element[2]);
-    printf("The char character is: %s \n", atom->element);
+    printf("The string read from char array is: %s \n", atom->element);
 #endif
 }
 
@@ -65,16 +62,16 @@ void molappend_atom(molecule *molecule, atom *atom)
         }
         molecule->atom_max *= 2; //* double size of atom_max
 
-        /* Reallocating memory */
+        /* Reallocating Memory (ATOM) */
 
 #ifdef DEBUG_ON
-        printf("The array is now full. REALLOCATING!!!....\n"); //! error checking
+        printf("The (ATOM) array is now full. REALLOCATING!!!....\n"); //! error checking
 #endif
-                                                                // *(molecule->atoms) = (atom *)realloc(molecule->atoms, molecule->atom_max);
+                                                                       // *(molecule->atoms) = (atom *)realloc(molecule->atoms, molecule->atom_max);
         a1 = (struct atom *)realloc(molecule->atoms, molecule->atom_max * sizeof(struct atom)); // you cannot use atom* here
 #ifdef DEBUG_ON
-        printf("Address pointed to by molecule->atoms(old memory address): %p\n", (void *)molecule->atoms);     //! error checking
-        printf("Address pointed to by temp a1 in header file(new memory address #REALLOC) : %p\n", (void *)a1); //! error checking
+        printf("Address pointed to by {molecule->atoms} (old memory address): %p\n", (void *)molecule->atoms);     //! error checking
+        printf("Address pointed to by {temp a1} in header file (new memory address #REALLOC): %p\n", (void *)a1); //! error checking
 #endif
 
         if (a1 == NULL) //! add more statements or return 0 --CHECK THIS
@@ -88,14 +85,14 @@ void molappend_atom(molecule *molecule, atom *atom)
 
             molecule->atoms = a1;
 #ifdef DEBUG_ON
-            printf("Address assigned by temp a1 to molecule->atoms in header file(new memory address #REALLOC) : %p\n", (void *)molecule->atoms); //! error checking
+            printf("Address assigned by {temp a1} to {molecule->atoms} in header file (new memory address #REALLOC): %p\n", (void *)molecule->atoms); //! error checking
 #endif
         }
 
         a2 = (struct atom **)realloc(molecule->atom_ptrs, molecule->atom_max * sizeof(struct atom *));
 #ifdef DEBUG_ON
-        printf("Address pointed to by molecule->atom_ptr(old memory address): %p\n", (void *)molecule->atom_ptrs); //! error checking
-        printf("Address pointed to by temp a2 in header file(new memory address #REALLOC) : %p\n", (void *)a2);    //! error checking
+        printf("Address pointed to by {molecule->atom_ptr} (old memory address): %p\n", (void *)molecule->atom_ptrs); //! error checking
+        printf("Address pointed to by {temp a2} in header file (new memory address #REALLOC) : %p\n", (void *)a2);    //! error checking
 #endif
         if (a2 == NULL) //! add more statements or return 0 --CHECK THIS
         {
@@ -107,7 +104,7 @@ void molappend_atom(molecule *molecule, atom *atom)
         {
             molecule->atom_ptrs = a2;
 #ifdef DEBUG_ON
-            printf("Address assigned by temp a1 to molecule->atoms in header file(new memory address #REALLOC) : %p\n", (void *)molecule->atom_ptrs); //! error checking
+            printf("Address assigned by {temp a2} to {molecule->atom_ptrs} in header file(new memory address #REALLOC) : %p\n", (void *)molecule->atom_ptrs); //! error checking
 #endif
         }
 
@@ -121,8 +118,8 @@ void molappend_atom(molecule *molecule, atom *atom)
         molecule->atoms[molecule->atom_no].x = atom->x;
         molecule->atoms[molecule->atom_no].y = atom->y;
         molecule->atoms[molecule->atom_no].z = atom->z;
-        molecule->atom_ptrs[molecule->atom_no] = &molecule->atoms[0]; // pointer to the first atom
-        molecule->atom_no += 1;                                       // increment after addition
+        molecule->atom_ptrs[molecule->atom_no] = &molecule->atoms[molecule->atom_no]; // pointer to the first atom
+        molecule->atom_no += 1;                                                       // increment after addition
     }
 
     if ((molecule->atom_no == 0) && (molecule->atom_max != 0)) //* check if the molecule is initially empty ( executes for first element only)
@@ -145,7 +142,7 @@ void molappend_atom(molecule *molecule, atom *atom)
 Functions for the bond
 **********************/
 
-void bondset(bond *bond, atom *a1, atom *a2, unsigned char epairs)
+void bondset(bond *bond, atom *a1, atom *a2, unsigned char epairs) //* setter for the bond variable
 {
     bond->a1 = a1;
     bond->a2 = a2;
@@ -156,10 +153,98 @@ void bondset(bond *bond, atom *a1, atom *a2, unsigned char epairs)
     bond->eparis = epairs;
 }
 
+void molappend_bond(molecule *molecule, bond *bond)
+{ //! bond_no initially set to 0
+
+    struct bond *b1, **b2;
+
+    if (molecule->bond_no == molecule->bond_max) //* check if bond_no and bond_max are equal
+    {
+        if (molecule->bond_max == 0) //! TEST THIS when bond_max = 0
+        {
+            molecule->bond_max += 1; //* add 1 if bond_max = 0
+        }
+        molecule->bond_max *= 2; //* double size of bond_max
+
+        /* Reallocating Memory (BOND) */
+
+#ifdef DEBUG_ON
+        printf("\nThe (BOND) array is now full. REALLOCATING!!!....\n"); //! error checking
+#endif
+
+        b1 = (struct bond *)realloc(molecule->bonds, molecule->bond_max * sizeof(struct bond)); // you cannot use atom* here
+
+#ifdef DEBUG_ON
+        printf("Address pointed to by {molecule->bonds} (old memory address): %p\n", (void *)molecule->bonds);     //! error checking
+        printf("Address pointed to by {temp b1} in header file (new memory address #REALLOC): %p\n", (void *)b1); //! error checking
+#endif
+
+        if (b1 == NULL) //! add more statements or return 0 --CHECK THIS
+        {
+#ifdef DEBUG_ON
+            printf("No additional heap for atoms *atom \n");
+#endif
+        }
+        else
+        {
+
+            molecule->bonds = b1;
+#ifdef DEBUG_ON
+            printf("Address assigned by {temp b1} to {molecule->bonds} in header file (new memory address #REALLOC): %p\n", (void *)molecule->bonds); //! error checking
+#endif
+        }
+
+        b2 = (struct bond **)realloc(molecule->bond_ptrs, molecule->bond_max * sizeof(struct bond *));
+#ifdef DEBUG_ON
+        printf("Address pointed to by {molecule->bond_ptr} (old memory address): %p\n", (void *)molecule->bond_ptrs); //! error checking
+        printf("Address pointed to by {temp b2} in header file (new memory address #REALLOC): %p\n", (void *)b2);    //! error checking
+#endif
+
+        if (b2 == NULL) //! add more statements or return 0 --CHECK THIS
+        {
+#ifdef DEBUG_ON
+            printf("No additional heap for atom **atoms \n");
+#endif
+        }
+        else
+        {
+            molecule->bond_ptrs = b2;
+#ifdef DEBUG_ON
+            printf("Address assigned by {temp b2} to molecule->bond_ptrs in header file(new memory address #REALLOC) : %p \n\n", (void *)molecule->bond_ptrs); //! error checking
+#endif
+        }
+    }
+
+    if ((molecule->bond_no > 0) && (molecule->bond_no < molecule->bond_max)) //* check bond_no is greater than 0 and lesser than bond_max
+    {
+        molecule->bonds[molecule->bond_no].a1 = bond->a1; //* assign the first member from parameter passed to molecule
+        molecule->bonds[molecule->bond_no].a2 = bond->a2;
+        molecule->bonds[molecule->bond_no].eparis = bond->eparis;
+        molecule->bond_ptrs[molecule->bond_no] = &molecule->bonds[molecule->bond_no]; //! CHECK THIS
+        molecule->bond_no += 1;                                                       // increment after addition
+    }
+
+    if ((molecule->bond_no == 0) && (molecule->bond_max != 0)) //* check if the molecule is initially empty (executes for first element only)
+    {
+        //! index is static for first element in array[0]
+        molecule->bonds[0].a1 = bond->a1; //* assign the first member from parameter passed to molecule
+        molecule->bonds[0].a2 = bond->a2;
+        molecule->bonds[0].eparis = bond->eparis;
+        molecule->bond_ptrs[0] = &molecule->bonds[0]; //! CHECK THIS
+        molecule->bond_no += 1;
+
+#ifdef DEBUG_ON
+        printf("Address pointed to by molecule->bond_ptrs[0] in header file : %p\n", (void *)molecule->bond_ptrs[0]); //! error checking
+        
+#endif
+    }
+    printf("The value of bond_max is %d \n", molecule->bond_max);
+    printf("The number of bonds currently in the molecule is: %d \n", molecule->bond_no);
+}
+
 /*******************
 Additional functions
 ********************/
-
 
 // void molsort(molecule *molecule);
 
