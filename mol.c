@@ -97,6 +97,7 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 
 		a2 = (struct atom **)realloc(molecule->atom_ptrs, molecule->atom_max * sizeof(struct atom *));
 #ifdef DEBUG_ON
+		printf("-----------------------------------------------------------------------------------------------------------\n");
 		printf("Address pointed to by {molecule->atom_ptr} (old memory address): %p\n", (void *)molecule->atom_ptrs); //! error checking
 		printf("Address pointed to by {temp a2} in header file (new memory address #REALLOC) : %p\n", (void *)a2);	  //! error checking
 #endif
@@ -113,6 +114,19 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 			printf("Address assigned by {temp a2} to {molecule->atom_ptrs} in header file(new memory address #REALLOC) : %p\n", (void *)molecule->atom_ptrs); //! error checking
 #endif
 		}
+
+		for (int i = 0; i < molecule->atom_no; i++)
+		{
+			molecule->atom_ptrs[i] = &molecule->atoms[i];
+		}
+
+#ifdef DEBUG_ON
+		printf("-----------------------------------------------------------------------------------------------------------\n");
+		printf("Address pointed of index[0] in atoms (after re-alloc): %p\n", (void *)&molecule->atoms[0]);			 //! error checking
+		printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->atom_ptrs[0]); //! error checking
+		// printf("Address pointed of index[1] in atoms (after re-alloc): %p\n", (void *)&molecule->atoms[1]);			 //! error checking
+		// printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->atom_ptrs[1]); //! error checking
+#endif
 
 		// free(a1); //? FREE THIS ?
 		// free(a2);
@@ -155,7 +169,7 @@ void bondset(bond *bond, atom *a1, atom *a2, unsigned char epairs) //* setter fo
 	bond->a1 = a1;
 	bond->a2 = a2;
 #ifdef DEBUG_ON
-	printf("\n==================================== [MAIN.C] This is for bondset() =======================================\n");
+	printf("\n==================================== [MOL.C] This is for bondset() =======================================\n");
 	printf("Address pointed to by bond->a1 in the header file: %p\n", (void *)bond->a1); //! error checking
 	printf("Address pointed to by bond->a2 in the header file: %p\n", (void *)bond->a2); //! error checking
 #endif
@@ -197,7 +211,6 @@ void molappend_bond(molecule *molecule, bond *bond) // appends the bonds
 		}
 		else
 		{
-
 			molecule->bonds = b1;
 #ifdef DEBUG_ON
 			printf("Address assigned by {temp b1} to {molecule->bonds} in header file (new memory address #REALLOC): %p\n", (void *)molecule->bonds); //! error checking
@@ -206,6 +219,7 @@ void molappend_bond(molecule *molecule, bond *bond) // appends the bonds
 
 		b2 = (struct bond **)realloc(molecule->bond_ptrs, molecule->bond_max * sizeof(struct bond *));
 #ifdef DEBUG_ON
+		printf("-----------------------------------------------------------------------------------------------------------\n");
 		printf("Address pointed to by {molecule->bond_ptr} (old memory address): %p\n", (void *)molecule->bond_ptrs); //! error checking
 		printf("Address pointed to by {temp b2} in header file (new memory address #REALLOC): %p\n", (void *)b2);	  //! error checking
 #endif
@@ -223,6 +237,17 @@ void molappend_bond(molecule *molecule, bond *bond) // appends the bonds
 			printf("Address assigned by {temp b2} to molecule->bond_ptrs in header file(new memory address #REALLOC) : %p \n\n", (void *)molecule->bond_ptrs); //! error checking
 #endif
 		}
+
+		for (int i = 0; i < molecule->bond_no; i++)
+		{
+			molecule->bond_ptrs[i] = &molecule->bonds[i];
+		}
+
+#ifdef DEBUG_ON
+		printf("-----------------------------------------------------------------------------------------------------------\n");
+		printf("Address pointed of index[0] in atoms (after re-alloc): %p\n", (void *)&molecule->bonds[0]);			 //! error checking
+		printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->bond_ptrs[0]); //! error checking
+#endif
 	}
 
 	if ((molecule->bond_no > 0) && (molecule->bond_no < molecule->bond_max)) //* check bond_no is greater than 0 and lesser than bond_max
@@ -276,14 +301,6 @@ int compare_atom_ptr(const void *a, const void *b) // compare atom pointers
 #endif
 
 	return ((int)(double_a - double_b));
-
-	//! RETURN int after comparing the doubles
-	//! Covert deg. o radians
-
-	//! get the matrix  (conversion)
-	//!  matrix multiplication (apply to atoms)
-	// double_ptr_a = a;
-	// double_ptr_b = b;
 }
 
 int compare_bond_ptr(const void *a, const void *b)
@@ -385,7 +402,6 @@ void xrotation(xform_matrix xform_matrix, unsigned short deg)
 	//* the xform_matrix act as a pointer since an array is passed
 	//? so the value of xform_matrix is stored in mem after fun. has finished execution
 
-		
 	double rad = deg * (PI / 180.0);
 	xform_matrix[0][0] = cos(rad);
 	xform_matrix[0][1] = 0;
@@ -432,7 +448,7 @@ void mol_xform(molecule *molecule, xform_matrix matrix)
 	printf("\n==================================== [MOL.C] This is for mol_xform() ==============================\n");
 	for (int i = 0; i < molecule->atom_no; i++)
 	{
-		printf("BFR MATRIX TRANSFORM: %lf, %lf, %lf\n", molecule->atoms[i].x , molecule->atoms[i].y, molecule->atoms[i].z);
+		printf("BFR MATRIX TRANSFORM: %lf, %lf, %lf\n", molecule->atoms[i].x, molecule->atoms[i].y, molecule->atoms[i].z);
 	}
 	// #endif
 
@@ -443,17 +459,14 @@ void mol_xform(molecule *molecule, xform_matrix matrix)
 		molecule->atoms[i].z = (matrix[2][0] * molecule->atoms[i].x) + (matrix[2][1] * molecule->atoms[i].y) + (matrix[2][2] * molecule->atoms[i].z);
 	}
 
-	#ifdef DEBUG_ON
+#ifdef DEBUG_ON
 	printf("\n==================================== [MOL.C] This is for mol_xform() ==============================\n");
 	for (int i = 0; i < molecule->atom_no; i++)
 	{
-		printf("ATR MATRIX TRANSFORM: %lf, %lf, %lf\n",molecule->atoms[i].x , molecule->atoms[i].y, molecule->atoms[i].z);
+		printf("ATR MATRIX TRANSFORM: %lf, %lf, %lf\n", molecule->atoms[i].x, molecule->atoms[i].y, molecule->atoms[i].z);
 	}
-	#endif
+#endif
 }
-
-
-
 
 void molfree(molecule *ptr)
 {
@@ -463,5 +476,3 @@ void molfree(molecule *ptr)
 	free(ptr->bond_ptrs);
 	free(ptr);
 }
-
-

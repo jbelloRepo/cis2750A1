@@ -11,19 +11,19 @@ int main(int argc, char **argv)
     x = 2.5369;
     y = -0.1550;
     z = 3.0003;
-    atomset(&a1, "O", &x, &y, &z); //* Function call
+    atomset(&a1, "O", &x, &y, &z); // set struct variables for a1
 
     x = 3.0739;
     y = 0.1550;
     z = 10.0002;
-    atomset(&a2, "H", &x, &y, &z); //* Function call
+    atomset(&a2, "H", &x, &y, &z); // set struct variables for a2
 
     x = 2.0000;
     y = 0.1550;
     z = 2.0001;
-    atomset(&a3, "H", &x, &y, &z); //* Function call
+    atomset(&a3, "H", &x, &y, &z); // set struct variables for a3
 
-    molecule = molmalloc(3, 2);
+    molecule = molmalloc(0, 0);
     // printf("address of molecule_ptr in main file: %p\n", (void *)molecule);
     // printf("The atom max is: %d \n", molecule->atom_max);
     // printf("The bond max is: %d \n", molecule->bond_max);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     bondset(&bond2, &(molecule->atoms[0]), &(molecule->atoms[2]), 1);
 
     printf("\n==================================== [MAIN.C] This is for bondset() =======================================\n");
-    printf("Address pointed to by molecule->atoms[0] & (molecule->atoms[1]: %p & %p \n", (void *)&(molecule->atoms[0]), (void *)&(molecule->atoms[1])); //! error checking
+    printf("Address pointed to by molecule->atoms[0] & (molecule->atoms[1]: %p & %p \n", (void *)&(molecule->atoms[0]), (void *)&(molecule->atoms[1]));   //! error checking
     printf("Address pointed to by molecule->atoms[0] & (molecule->atoms[2]: %p & %p \n\n", (void *)&(molecule->atoms[0]), (void *)&(molecule->atoms[2])); //! error checking
 
     /* add the bonds */
@@ -82,6 +82,37 @@ int main(int argc, char **argv)
 
         k += 1;
     } while (k < 1);
+
+    printf("Address of the atom and bond\n");
+    printf("ATOMS: ");
+    for (int i = 0; i < molecule->atom_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)&molecule->atoms[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)&molecule->atoms[i]);
+        }
+    }
+    printf("\n");
+
+    printf("BONDS: ");
+    for (int i = 0; i < molecule->bond_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)&molecule->bonds[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)&molecule->bonds[i]);
+        }
+    }
+    printf("\n↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+    printf("\n-----------------------------------------------------------------------------------------------------------\n");
+    printf("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑\n");
 
     printf("Address of the atom and bond pointers\n");
     printf("ATOM_PTRS: ");
@@ -117,27 +148,23 @@ int main(int argc, char **argv)
     // molappend_bond(molecule, &bond1);
     // molappend_bond(molecule, &bond2);
     // molappend_bond(molecule, &bond2);
-
     molsort(molecule);
-    molfree(molecule);
 
-
-
-    xform_matrix xrot, yrot, zrot; 
-    xrotation( xrot, 30 );
-    yrotation( yrot, 45 );
-    zrotation( zrot, 60 );
+    xform_matrix xrot, yrot, zrot;
+    xrotation(xrot, 30);
+    yrotation(yrot, 45);
+    zrotation(zrot, 60);
 
     printf("==================================== [MAIN.C] This is for xrot() ==============================\n");
-    printf("The value of xrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", xrot[0][0],xrot[0][1],xrot[0][2],xrot[1][0],xrot[1][1],xrot[1][2],xrot[2][0],xrot[2][1],xrot[2][2]);
-    printf("The value of yrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", yrot[0][0],yrot[0][1],yrot[0][2],yrot[1][0],yrot[1][1],yrot[1][2],yrot[2][0],yrot[2][1],yrot[2][2]);
-    printf("The value of zrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", zrot[0][0],zrot[0][1],zrot[0][2],zrot[1][0],zrot[1][1],zrot[1][2],zrot[2][0],zrot[2][1],zrot[2][2]);
-    
+    printf("The value of xrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", xrot[0][0], xrot[0][1], xrot[0][2], xrot[1][0], xrot[1][1], xrot[1][2], xrot[2][0], xrot[2][1], xrot[2][2]);
+    printf("The value of yrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", yrot[0][0], yrot[0][1], yrot[0][2], yrot[1][0], yrot[1][1], yrot[1][2], yrot[2][0], yrot[2][1], yrot[2][2]);
+    printf("The value of zrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", zrot[0][0], zrot[0][1], zrot[0][2], zrot[1][0], zrot[1][1], zrot[1][2], zrot[2][0], zrot[2][1], zrot[2][2]);
 
-    mol_xform( molecule, xrot );
-    mol_xform( molecule, yrot );
-    mol_xform( molecule, zrot );
+    mol_xform(molecule, xrot);
+    mol_xform(molecule, yrot);
+    mol_xform(molecule, zrot);
 
+    molfree(molecule);
 
     return 0;
 }
