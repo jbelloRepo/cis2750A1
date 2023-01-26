@@ -2,3 +2,5 @@ test1.c
 *.o 
 *.so 
 main
+A1test*
+notes.txt

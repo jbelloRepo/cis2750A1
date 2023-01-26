@@ -9,12 +9,12 @@
  *
  */
 
-
 #ifndef _mol_h
 #define _mol_h
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 /* Structures and Typedefs */
 typedef struct atom // atom ADT
@@ -55,7 +55,12 @@ void molfree(molecule *ptr);
 void molappend_atom(molecule *molecule, atom *atom);
 void molappend_bond(molecule *molecule, bond *bond);
 
-// void molsort(molecule *molecule);
+void xrotation(xform_matrix xform_matrix, unsigned short deg);
+void yrotation(xform_matrix xform_matrix, unsigned short deg);
+void zrotation(xform_matrix xform_matrix, unsigned short deg);
+void mol_xform(molecule *molecule, xform_matrix matrix);
+
+void molsort(molecule *molecule);
 void printHello(void);
 
 #endif

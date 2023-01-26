@@ -6,7 +6,7 @@ LIBS=-lm # note: the l means library, m means math
 # all: main
 
 main: main.o mol.o
-	$(CC) $(CFLAGS) main.o mol.o -o main
+	$(CC) $(CFLAGS) main.o mol.o -o main $(LIBS)
 
 test1: test1.o mol.o
 	$(CC) mol.o test1.o -o test1 $(LIBS)
