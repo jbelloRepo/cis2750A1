@@ -2,10 +2,10 @@
 
 int main(int argc, char **argv)
 {
-    double x, y, z;     // position of atom relative to molecule
-    atom a1, a2, a3;    // variable for atoms of type (atom)
-    bond bond1, bond2;  // variable for bond of type (bond)
-    molecule *molecule; // (pointer) variable for molecule of type (molecule)
+    double x, y, z;          // position of atom relative to molecule
+    atom a1, a2, a3;         // variable for atoms of type (atom)
+    bond bond1, bond2;       // variable for bond of type (bond)
+    molecule *molecule, *mx; // (pointer) variable for molecule of type (molecule)
 
     /* set the atoms */
     x = 2.5369;
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     z = 2.0001;
     atomset(&a3, "H", &x, &y, &z); // set struct variables for a3
 
-    molecule = molmalloc(0, 0);
+    molecule = molmalloc(2, 2);
     // printf("address of molecule_ptr in main file: %p\n", (void *)molecule);
     // printf("The atom max is: %d \n", molecule->atom_max);
     // printf("The bond max is: %d \n", molecule->bond_max);
@@ -90,6 +90,7 @@ int main(int argc, char **argv)
         if (i == 0)
         {
             printf(" %p", (void *)&molecule->atoms[i]);
+            // printf(" %p", molecule->atoms[i]);
         }
         else
         {
@@ -164,7 +165,75 @@ int main(int argc, char **argv)
     mol_xform(molecule, yrot);
     mol_xform(molecule, zrot);
 
+    // molcopy creates a copy of the molecule passed
+    //  allocate space in mem; size should be based on the atom max and bond max
+
+    mx = molcopy(molecule);
+    printf("Address of the atom and bond\n");
+    printf("ATOMS: ");
+    for (int i = 0; i < mx->atom_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)&mx->atoms[i]);
+            // printf(" %p", molecule->atoms[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)&mx->atoms[i]);
+        }
+    }
+    printf("\n");
+
+    printf("BONDS: ");
+    for (int i = 0; i < mx->bond_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)&mx->bonds[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)&mx->bonds[i]);
+        }
+    }
+    printf("\n↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+    printf("\n-----------------------------------------------------------------------------------------------------------\n");
+    printf("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑\n");
+
+    printf("Address of the atom and bond pointers\n");
+    printf("ATOM_PTRS: ");
+    for (int i = 0; i < mx->atom_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)mx->atom_ptrs[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)mx->atom_ptrs[i]);
+        }
+    }
+    printf("\n");
+
+    printf("BOND_PTRS: ");
+    for (int i = 0; i < mx->bond_no; i++)
+    {
+        if (i == 0)
+        {
+            printf(" %p", (void *)mx->bond_ptrs[i]);
+        }
+        else
+        {
+            printf(" %p", (void *)mx->bond_ptrs[i]);
+        }
+    }
+    printf("\n");
+    printf("===========================================================================================================\n");
+    printf("\n");
+
     molfree(molecule);
+    molfree(mx);
 
     return 0;
 }

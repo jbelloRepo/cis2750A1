@@ -124,8 +124,8 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 		printf("-----------------------------------------------------------------------------------------------------------\n");
 		printf("Address pointed of index[0] in atoms (after re-alloc): %p\n", (void *)&molecule->atoms[0]);			 //! error checking
 		printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->atom_ptrs[0]); //! error checking
-		// printf("Address pointed of index[1] in atoms (after re-alloc): %p\n", (void *)&molecule->atoms[1]);			 //! error checking
-		// printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->atom_ptrs[1]); //! error checking
+																													 // printf("Address pointed of index[1] in atoms (after re-alloc): %p\n", (void *)&molecule->atoms[1]);			 //! error checking
+																													 // printf("Address pointed to by {molecule->atom_ptr} (after re-alloc): %p\n", (void *)molecule->atom_ptrs[1]); //! error checking
 #endif
 
 		// free(a1); //? FREE THIS ?
@@ -475,4 +475,58 @@ void molfree(molecule *ptr)
 	free(ptr->bonds);
 	free(ptr->bond_ptrs);
 	free(ptr);
+}
+
+molecule *molcopy(molecule *src)
+{
+	// src is a molecule passed
+
+	// // atom struct members
+	// double x, y, z;
+	// char element[3];
+
+	// // bond struct members
+	// atom *a1, *a2;
+	// unsigned char epairs;
+
+	atom anAtom;		// an atom variable
+	bond aBond;			// a bond variable
+	molecule *moleCopy; // molecule variable
+
+	unsigned short atom_max = src->atom_max, bond_max = src->bond_max;
+
+	// printf("\nThe atom max and bond max: %d %d\n", atom_max, bond_max);
+	moleCopy = molmalloc(atom_max, bond_max); // dym allocate space for mole copy
+
+	// set strcut members in molecule
+	moleCopy->atom_max = src->atom_max;
+	// moleCopy->atom_no = src->atom_no; //! FIXME -- do not set this
+	moleCopy->bond_max = src->bond_max;
+	// moleCopy->bond_no = src->bond_no; //! FIXME -- do not set this
+
+	// append atoms in atom arrays
+	for (int i = 0; i < src->atom_no; i++)
+	{
+		//? Create the atom at array index
+		strcpy(anAtom.element, src->atoms[i].element);
+		anAtom.x = src->atoms[i].x;
+		anAtom.y = src->atoms[i].y;
+		anAtom.z = src->atoms[i].z;
+
+		printf("\n==MOLCOPY== Adding atom to the molecule copy\n");
+		molappend_atom(moleCopy, &anAtom); // append all atoms to molcopy
+		printf("==MOLCOPY== A new atom has been added. TOTAL COUNT: %d \n", i + 1);
+	}
+
+	for (int i = 0; i < src->bond_no; i++)
+	{
+		//? Create the bond at bond index
+		aBond.eparis = src->bonds[i].eparis;
+		aBond.a1 = src->bonds[i].a1;
+		aBond.a2 = src->bonds[i].a2;
+
+		molappend_bond(moleCopy, &aBond); // append all bonds
+	}
+
+	return moleCopy;
 }
