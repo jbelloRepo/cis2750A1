@@ -400,7 +400,31 @@ void molsort(molecule *molecule) // This function sorts an array of pointers (po
 void xrotation(xform_matrix xform_matrix, unsigned short deg)
 {
 	//* the xform_matrix act as a pointer since an array is passed
-	//? so the value of xform_matrix is stored in mem after fun. has finished execution
+
+	//  ---           ---
+	// | 1,    0,    0   |
+	// | 0, cos(), -sin()|
+	// | 0, sin(), cos() |
+	//  ---           ---
+
+	double rad = deg * (PI / 180.0);
+	xform_matrix[0][0] = 1;
+	xform_matrix[0][1] = 0;
+	xform_matrix[0][2] = 0;
+	xform_matrix[1][0] = 0;
+	xform_matrix[1][1] = cos(rad);
+	xform_matrix[1][2] = -sin(rad);
+	xform_matrix[2][0] = 0;
+	xform_matrix[2][1] = sin(rad);
+	xform_matrix[2][2] = cos(rad);
+}
+void yrotation(xform_matrix xform_matrix, unsigned short deg)
+{
+	//  ---           ---
+	// | cos(), 0, sin() |
+	// |    0   1,   0   |
+	// |-sin(), 0, cos() |
+	//  ---           ---
 
 	double rad = deg * (PI / 180.0);
 	xform_matrix[0][0] = cos(rad);
@@ -409,54 +433,52 @@ void xrotation(xform_matrix xform_matrix, unsigned short deg)
 	xform_matrix[1][0] = 0;
 	xform_matrix[1][1] = 1;
 	xform_matrix[1][2] = 0;
-	xform_matrix[2][0] = sin(rad);
-	xform_matrix[2][2] = cos(rad);
-	xform_matrix[2][1] = 0;
-}
-void yrotation(xform_matrix xform_matrix, unsigned short deg)
-{
-	double rad = deg * (PI / 180.0);
-	xform_matrix[0][0] = cos(rad);
-	xform_matrix[0][1] = 0;
-	xform_matrix[0][2] = sin(rad);
-	xform_matrix[1][0] = 0;
-	xform_matrix[1][1] = 1;
-	xform_matrix[1][2] = 0;
-	xform_matrix[2][0] = sin(rad);
+	xform_matrix[2][0] = -sin(rad);
 	xform_matrix[2][1] = 0;
 	xform_matrix[2][2] = cos(rad);
 }
 void zrotation(xform_matrix xform_matrix, unsigned short deg)
 {
+	//  ---             ---
+	// | cos(), -sin(),  0 |
+	// | sin()   cos(),  0 |
+	// |   0,      0,    1 |
+	//  ---           ---
+
 	double rad = deg * (PI / 180.0);
 	xform_matrix[0][0] = cos(rad);
-	xform_matrix[0][1] = 0;
-	xform_matrix[0][2] = sin(rad);
-	xform_matrix[1][0] = 0;
-	xform_matrix[1][1] = 1;
+	xform_matrix[0][1] = -sin(rad);
+	xform_matrix[0][2] = 0;
+	xform_matrix[1][0] = sin(rad);
+	xform_matrix[1][1] = cos(rad);
 	xform_matrix[1][2] = 0;
-	xform_matrix[2][0] = sin(rad);
+	xform_matrix[2][0] = 0;
 	xform_matrix[2][1] = 0;
-	xform_matrix[2][2] = cos(rad);
+	xform_matrix[2][2] = 1;
 }
 
 void mol_xform(molecule *molecule, xform_matrix matrix)
 {
 	// apply matrix vector multiplication
-	printf("MATRIX TRANSFORM: %lf\n", molecule->atoms[0].x);
-	// #ifdef DEBUG_ON
+	double x, y, z; // position of atom relative to molecule
+
+#ifdef DEBUG_ON
 	printf("\n==================================== [MOL.C] This is for mol_xform() ==============================\n");
 	for (int i = 0; i < molecule->atom_no; i++)
 	{
 		printf("BFR MATRIX TRANSFORM: %lf, %lf, %lf\n", molecule->atoms[i].x, molecule->atoms[i].y, molecule->atoms[i].z);
 	}
-	// #endif
+#endif
 
-	for (int i = 0; i < molecule->atom_no; i++)
+	for (int i = 0; i < molecule->atom_no; i++) // apply transformation to x,y,z values in molecule
 	{
-		molecule->atoms[i].x = (matrix[0][0] * molecule->atoms[i].x) + (matrix[0][1] * molecule->atoms[i].y) + (matrix[0][2] * molecule->atoms[i].z);
-		molecule->atoms[i].y = (matrix[1][0] * molecule->atoms[i].x) + (matrix[1][1] * molecule->atoms[i].y) + (matrix[1][2] * molecule->atoms[i].z);
-		molecule->atoms[i].z = (matrix[2][0] * molecule->atoms[i].x) + (matrix[2][1] * molecule->atoms[i].y) + (matrix[2][2] * molecule->atoms[i].z);
+		x = molecule->atoms[i].x;
+		y = molecule->atoms[i].y;
+		z = molecule->atoms[i].z;
+
+		molecule->atoms[i].x = (matrix[0][0] * x) + (matrix[0][1] * y) + (matrix[0][2] * z);
+		molecule->atoms[i].y = (matrix[1][0] * x) + (matrix[1][1] * y) + (matrix[1][2] * z);
+		molecule->atoms[i].z = (matrix[2][0] * x) + (matrix[2][1] * y) + (matrix[2][2] * z);
 	}
 
 #ifdef DEBUG_ON

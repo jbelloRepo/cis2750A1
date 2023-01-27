@@ -156,7 +156,7 @@ int main(int argc, char **argv)
     yrotation(yrot, 45);
     zrotation(zrot, 60);
 
-    printf("==================================== [MAIN.C] This is for xrot() ==============================\n");
+    printf("\n==================================== [MAIN.C] This is for xrot() ==============================\n");
     printf("The value of xrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", xrot[0][0], xrot[0][1], xrot[0][2], xrot[1][0], xrot[1][1], xrot[1][2], xrot[2][0], xrot[2][1], xrot[2][2]);
     printf("The value of yrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", yrot[0][0], yrot[0][1], yrot[0][2], yrot[1][0], yrot[1][1], yrot[1][2], yrot[2][0], yrot[2][1], yrot[2][2]);
     printf("The value of zrot in main.c is: %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf, %lf \n", zrot[0][0], zrot[0][1], zrot[0][2], zrot[1][0], zrot[1][1], zrot[1][2], zrot[2][0], zrot[2][1], zrot[2][2]);
