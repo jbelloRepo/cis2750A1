@@ -1,6 +1,6 @@
 #include "mol.h"
 #define PI 3.14159265358979323846 // define PI
-#define DEBUG_OFF  // for debugging
+#define DEBUG_OFF				  // for debugging
 
 /************************************
 ******** Function Definition ********
@@ -29,10 +29,13 @@ void atomset(atom *atom, char element[3], double *x, double *y, double *z) // se
 void atomget(atom *atom, char element[3], double *x, double *y, double *z)
 {
 	//* Copy elements into struct members
-	strcpy(element, atom->element); // strcpy to struct
-	*x = atom->x;
-	*y = atom->y;
-	*z = atom->z;
+	if (atom != NULL)
+	{
+		strcpy(element, atom->element); // strcpy to struct
+		*x = atom->x;
+		*y = atom->y;
+		*z = atom->z;
+	}
 }
 
 /******************************************
@@ -77,7 +80,10 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 		{
 			molecule->atom_max += 1; //* add 1 if atom_max = 0
 		}
-		molecule->atom_max *= 2; //* double size of atom_max
+		else
+		{
+			molecule->atom_max *= 2; //* double size of atom_max
+		}
 
 		/* Reallocating Memory (ATOM) */
 

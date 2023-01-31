@@ -62,6 +62,5 @@ void zrotation(xform_matrix xform_matrix, unsigned short deg);
 void mol_xform(molecule *molecule, xform_matrix matrix);
 
 void molsort(molecule *molecule);
-void printHello(void);
 
 #endif
