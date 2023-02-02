@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     z = 2.0001;
     atomset(&a3, "H", &x, &y, &z); // set struct variables for a3
 
-    molecule = molmalloc(2, 2);
+    molecule = molmalloc(0, 0);
     // printf("address of molecule_ptr in main file: %p\n", (void *)molecule);
     // printf("The atom max is: %d \n", molecule->atom_max);
     // printf("The bond max is: %d \n", molecule->bond_max);
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         printf("After the molappend_atom, the number of atoms in atoms is: %hu \n", molecule->atom_no);
 
         i += 1;
-    } while (i < 1); //? Tested with i<16000; at which point atom max = 49152
+    } while (i < 7); //? Tested with i<16000; at which point atom max = 49152
 
     bondset(&bond1, &(molecule->atoms[0]), &(molecule->atoms[1]), 1);
     bondset(&bond2, &(molecule->atoms[0]), &(molecule->atoms[2]), 1);
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         printf("After the molappend_bond, the number of bond in the molecule is: %hu \n", molecule->bond_no);
 
         k += 1;
-    } while (k < 1);
+    } while (k < 7);
 
     printf("Address of the atom and bond\n");
     printf("ATOMS: ");

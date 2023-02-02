@@ -65,6 +65,10 @@ molecule *molmalloc(unsigned short atom_max, unsigned short bond_max) // dym. al
 		molecule_ptr->bond_ptrs = (bond **)malloc(atom_max * sizeof(bond *));
 		molecule_ptr->bond_no = 0; // set to 0 initially
 	}
+	else
+	{
+		return NULL;
+	}
 	// molecule *mol_malloced_address = (molecule *)malloc(sizeof(molecule)); // pointer to molecule
 	return molecule_ptr;
 }
@@ -101,7 +105,7 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 
 		if (a1 == NULL) //! add more statements or return 0 --CHECK THIS
 		{
-
+			exit(EXIT_FAILURE);
 #ifdef DEBUG_ON
 			printf("No additional heap for atoms *atom \n");
 #endif
@@ -126,6 +130,7 @@ void molappend_atom(molecule *molecule, atom *atom) // FIXME: after re-allocatin
 #endif
 		if (a2 == NULL) //! add more statements or return 0 --CHECK THIS
 		{
+			exit(EXIT_FAILURE);
 
 #ifdef DEBUG_ON
 			printf("No additional heap for atom **atoms \n");
@@ -240,6 +245,7 @@ void molappend_bond(molecule *molecule, bond *bond) // appends the bonds
 
 		if (b1 == NULL) //! add more statements or return 0 --CHECK THIS
 		{
+			exit(EXIT_FAILURE);
 
 #ifdef DEBUG_ON
 			printf("No additional heap for atoms *atom \n");
@@ -265,6 +271,7 @@ void molappend_bond(molecule *molecule, bond *bond) // appends the bonds
 
 		if (b2 == NULL) //! add more statements or return 0 --CHECK THIS
 		{
+			exit(EXIT_FAILURE);
 
 #ifdef DEBUG_ON
 			printf("No additional heap for atom **atoms \n");
@@ -382,7 +389,7 @@ void molsort(molecule *molecule) // This function sorts an array of pointers (po
 	printf("\n");
 #endif
 
-	qsort(molecule->atom_ptrs, molecule->atom_no, sizeof(molecule->atom_ptrs[0]), compare_atom_ptr); // sort the atom_ptrs
+	qsort(molecule->atom_ptrs, molecule->atom_no, sizeof(atom *), compare_atom_ptr); // sort the atom_ptrs
 
 #ifdef DEBUG_ON
 	printf("AFTER  atom_ptr is sorted:");
@@ -418,7 +425,7 @@ void molsort(molecule *molecule) // This function sorts an array of pointers (po
 	printf("\n");
 #endif
 
-	qsort(molecule->bond_ptrs, molecule->bond_no, sizeof(molecule->bond_ptrs[0]), compare_bond_ptr); // sort the bond_ptrs
+	qsort(molecule->bond_ptrs, molecule->bond_no, sizeof(bond *), compare_bond_ptr); // sort the bond_ptrs
 
 #ifdef DEBUG_ON
 	printf("AFTER  bond_ptr is sorted:");
@@ -578,6 +585,7 @@ molecule *molcopy(molecule *src)
 #ifdef DEBUG_ON
 		printf("\n==MOLCOPY== Adding atom to the molecule copy\n");
 #endif
+
 		molappend_atom(moleCopy, &anAtom); // append all atoms to molcopy
 
 #ifdef DEBUG_ON
